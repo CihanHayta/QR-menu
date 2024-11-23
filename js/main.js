@@ -1,28 +1,39 @@
-
-
-// export const fetchMenu = async () => {
-//     // Fetch ile db.json'dan veriler alındı
-//     const res = await fetch("../db.json");
-
-//     // Veriler Js'de kullanılacak tipe çevirildi
-//    console.log(res);
-   
-//   };
+import { fetchMenu } from "./api.js";
+import { renderCards } from "./ui.js";
 
 
 
-// Db.json'dan verileri alan fonksiyon
-export const fetchMenu = async () => {
-    // Fetch ile db.json'dan veriler alındı
-    const res = await fetch("../db.json");
-    // Veriler Js'de kullanılacak tipe çevirildi
-    const data = await res.json();
-  
-    return data;
-    console.log(data);
-    
-  };
-  
+document.addEventListener("DOMContentLoaded", async () => {
+    const data = await fetchMenu();
 
-  console.log("hata 2");
-  
+    renderCards(data.menu);
+
+    const inputs = document.querySelectorAll("#buttons input");
+
+    inputs.forEach((input) => {
+
+        input.addEventListener("change", () => {
+
+            const selected = input.id;
+
+           
+            
+           
+
+            if (selected === "all") {
+                renderCards(data.menu);
+              } else {
+                // İlgili categoryle alakalı ürünleri filtrele
+                const filtered = data.menu.filter((item) => item.category == selected);
+                // Hepsi seçili değilse ilgili categoryi render et
+                renderCards(filtered);
+        
+                }
+
+
+        });
+
+    });
+
+
+});
